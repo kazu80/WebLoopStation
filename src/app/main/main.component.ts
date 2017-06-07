@@ -51,33 +51,8 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   ngAfterViewInit() {
-    const counter: HTMLElement = document.getElementById('counter');
-    const incrementBtn: HTMLElement = document.getElementById("increments");
-    const decrementBtn: HTMLElement = document.getElementById("decrements");
 
-    const incrementClick = Observable.fromEvent(incrementBtn, 'click');
-    const decrementClick = Observable.fromEvent(decrementBtn, 'click');
-
-    const clicks = Observable
-        .merge(incrementClick, decrementClick)
-        .map((event: any) => parseInt(event.target.value, 10));
-
-    const total = clicks
-        .scan((total, value) => total + value, 0);
-
-    total.subscribe(total => {
-      counter.innerText = total.toString();
-    });
-
-
-    // ------i-------------------------------->
-    // -----------------------d-------d------->
-    //             merge
-    // ------i----------------d-------d------->
-    //             map
-    // ------p----------------n-------n------->
-    //             scan
-    // 0-----1----------------0-----(-1)------>
+    navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(this.handleSuccess);
 
   }
 
@@ -89,5 +64,9 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     if (this.service.recording) {
       console.log("recording!!");
     }
+  }
+
+  private handleSuccess (stream): void {
+    console.log("get user media success!");
   }
 }
