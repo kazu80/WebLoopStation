@@ -6,6 +6,7 @@ import 'rxjs/add/operator/scan';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/merge';
 import {RecordingService} from "../service/recording.service";
+import {UsermediaService} from "../service/usermedia.service";
 
 @Component({
   selector: 'app-main',
@@ -17,8 +18,11 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
   public rec = false;
   public time = 0;
   public beat: number;
+  public mediaRecorder: any;
 
-  constructor(private service: RecordingService) { }
+  constructor(private service_recording: RecordingService,
+              private service_user_media: UsermediaService) {
+  }
 
   ngOnInit() {
     const stream = new Observable(observer => {
@@ -43,7 +47,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
           if (value[1] % 4 === 0) {
             this.time++;
-            this.service.recording = !this.service.recording;
+            this.service_recording.recording = !this.service_recording.recording;
           }
 
           console.log(this.play, this.beat, this.time);
@@ -51,7 +55,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   ngAfterViewInit() {
-
     navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(this.handleSuccess);
 
   }
@@ -61,12 +64,27 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
    * AngularJS/Vueで言うところのwatch
    */
   ngDoCheck() {
-    if (this.service.recording) {
-      console.log("recording!!");
+    if (this.service_recording.recording) {
+      if (this.service_user_media.user_media) {
+
+
+      }
     }
+
+
   }
 
   private handleSuccess (stream): void {
     console.log("get user media success!");
+
+    /*
+     this.mediaRecorder = new MediaRecorder(stream, {mimeType: 'audio/webm'});
+     this.mediaRecorder.ondataavailable = (event: any) => {
+     if (event.data.size > 0) this.recordedChunks.push(event.data);
+     };
+     */
+
+    this.service_recording.stream = stream;
+    this.service_user_media.user_media = true;
   }
 }
