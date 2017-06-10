@@ -41,6 +41,9 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     ngAfterViewInit() {
+        //
+        this.context = new AudioContext();
+
         // Get User Media
         navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(stream => {
             this.mediaRecorder                 = new MediaRecorder(stream, {mimeType: 'audio/webm'});
@@ -71,10 +74,47 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
                 this.service_recording.stop      = false;
                 this.service_recording.recording = false;
 
-                const superBuffer: Blob         = new Blob(this.recordedChunks);
-                const recordingSoundUrl: string = window.URL.createObjectURL(superBuffer);
-                console.log(recordingSoundUrl);
+                if (this.recordedChunks.length > 0) {
+                    const superBuffer: Blob         = new Blob(this.recordedChunks);
+                    const recordingSoundUrl: string = window.URL.createObjectURL(superBuffer);
+
+                    const audio: HTMLAudioElement = new Audio(recordingSoundUrl);
+                    audio.play();
+
+                    // this.urls.push(recordingSoundUrl);
+                }
             }
+        }
+
+        if (this.urls.length > 0) {
+
+            const bufferUrls = this.urls.shift();
+            console.log(bufferUrls);
+
+            /*
+             const foo = this.context.createBufferSource();
+             console.log(  foo);
+             */
+
+            /*
+             const gainNode      = this.context.createGain();
+             gainNode.gain.value = 1.0;
+
+             foo.connect(gainNode);
+             gainNode.connect(this.context.destination);
+             foo.start(this.context.currentTime + 0.100);
+             */
+
+            /*
+             console.log(1);
+
+             foo.buffer = bufferUrls;
+
+             console.log(2);
+
+             const time = this.context.currentTime + 0.100;
+             this.playSound(foo.buffer, time);
+             */
         }
     }
 
@@ -115,8 +155,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
         this.kick.buffer  = bufferList[1];
         this.snare.buffer = bufferList[2];
 
-        console.log(this.context.currentTime);
-
         // We'll start playing the rhythm 100 milliseconds from "now"
         const startTime      = this.context.currentTime + 0.100;
         const tempo          = 80; // BPM (beats per minute)
@@ -141,10 +179,13 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     };
 
     playSound(buffer, time) {
+        console.log("play sound!!");
+
         const source = this.context.createBufferSource();
+        // const source = this.context.createBuffer();
 
         const gainNode      = this.context.createGain();
-        gainNode.gain.value = 0.1;
+        gainNode.gain.value = 0.5;
 
         source.buffer = buffer;
         source.connect(gainNode);
