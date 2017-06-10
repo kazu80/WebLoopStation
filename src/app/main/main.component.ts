@@ -29,6 +29,8 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     snare: any;
     hihat: any;
 
+    /** Looper params **/
+    urls: any[] = [];
 
     constructor(private service_recording: RecordingService,
                 private service_user_media: UsermediaService) {
@@ -36,9 +38,57 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
     ngOnInit() {
 
-
     }
 
+    ngAfterViewInit() {
+        // Get User Media
+        navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(stream => {
+            this.mediaRecorder                 = new MediaRecorder(stream, {mimeType: 'audio/webm'});
+            this.mediaRecorder.ondataavailable = (event: any) => {
+                if (event.data.size > 0) {
+                    this.recordedChunks.push(event.data)
+                }
+            };
+
+            this.service_recording.stream      = stream;
+            this.service_user_media.user_media = true;
+        });
+    }
+
+    /**
+     * 変更チェックをngDoCheckで行なう。
+     * AngularJS/Vueで言うところのwatch
+     */
+    ngDoCheck() {
+        if (this.service_user_media.user_media) {
+
+            if (!this.service_recording.recording && this.service_recording.start) {
+                this.mediaRecorder.start();
+                this.service_recording.start     = false;
+                this.service_recording.recording = true;
+            } else if (this.service_recording.recording && this.service_recording.stop) {
+                this.mediaRecorder.stop();
+                this.service_recording.stop      = false;
+                this.service_recording.recording = false;
+
+                const superBuffer: Blob         = new Blob(this.recordedChunks);
+                const recordingSoundUrl: string = window.URL.createObjectURL(superBuffer);
+                console.log(recordingSoundUrl);
+            }
+        }
+    }
+
+    public clickLooper() {
+        if (this.service_recording.recording) {
+            this.service_recording.stop = true;
+        } else {
+            this.service_recording.start = true;
+        }
+    }
+
+    /**
+     * play Rock Sound
+     */
     public playRockSound() {
         this.context = new AudioContext();
 
@@ -100,43 +150,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
         source.connect(gainNode);
         gainNode.connect(this.context.destination);
         source.start(time);
-    }
-
-    ngAfterViewInit() {
-
-        // Get User Media
-        navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(stream => {
-            this.mediaRecorder                 = new MediaRecorder(stream, {mimeType: 'audio/webm'});
-            this.mediaRecorder.ondataavailable = (event: any) => {
-                if (event.data.size > 0) {
-                    this.recordedChunks.push(event.data)
-                }
-            };
-
-            this.service_recording.stream      = stream;
-            this.service_user_media.user_media = true;
-        });
-    }
-
-    /**
-     * 変更チェックをngDoCheckで行なう。
-     * AngularJS/Vueで言うところのwatch
-     */
-    ngDoCheck() {
-        if (this.service_user_media.user_media) {
-
-            if (!this.service_recording.recording && this.service_recording.start) {
-                this.mediaRecorder.start();
-                this.service_recording.start = false;
-            } else if (this.service_recording.recording && this.service_recording.stop) {
-                this.mediaRecorder.stop();
-                this.service_recording.stop = false;
-
-                const superBuffer: Blob         = new Blob(this.recordedChunks);
-                const recordingSoundUrl: string = window.URL.createObjectURL(superBuffer);
-                console.log(recordingSoundUrl);
-            }
-        }
     }
 
     public click(): void {
