@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+
+* {
+    margin  : 0;
+    padding : 0;
+}
+
+html,
+body {
+    position         : relative;
+    width            : 320px;
+    height           : 100%;
+    background-color : #fefefe;
+}
+
+,
+
+.app-main-wrapper {
+    position         : relative;
+    width            : 320px;
+    height           : 100%;
+    background-color : #fefefe;
+    overflow         : hidden;
+}

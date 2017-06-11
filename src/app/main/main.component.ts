@@ -9,6 +9,7 @@ import {RecordingService} from "../service/recording.service";
 import {UsermediaService} from "../service/usermedia.service";
 
 import {BufferLoaderFoo} from '../lib/BufferLoaderFoo';
+import {PlayService} from "../service/play.service";
 
 @Component({
     selector   : 'app-main',
@@ -33,11 +34,13 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     urls: any[] = [];
 
     constructor(private service_recording: RecordingService,
-                private service_user_media: UsermediaService) {
+                private service_user_media: UsermediaService,
+                private service_play: PlayService) {
     }
 
     ngOnInit() {
-
+        this.play = this.service_play.start;
+        this.rec  = this.service_recording.recording;
     }
 
     ngAfterViewInit() {
@@ -69,6 +72,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
                 this.mediaRecorder.start();
                 this.service_recording.start     = false;
                 this.service_recording.recording = true;
+
             } else if (this.service_recording.recording && this.service_recording.stop) {
                 this.mediaRecorder.stop();
                 this.service_recording.stop      = false;
@@ -77,58 +81,31 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
                 if (this.recordedChunks.length > 0) {
                     const superBuffer: Blob         = new Blob(this.recordedChunks);
                     const recordingSoundUrl: string = window.URL.createObjectURL(superBuffer);
-
                     this.urls.push(recordingSoundUrl);
+
+                    console.log(this.urls);
+
+                    this.recordedChunks = [];
+
+                    this.service_play.start = true;
                 }
             }
         }
 
-        if (this.urls.length > 0) {
+        if (this.service_play.start === true) {
+            this.service_play.start   = false;
+            this.service_play.playing = true;
 
-            const bufferUrls = this.urls.shift();
-            console.log(bufferUrls);
+            this.context = new AudioContext();
 
-            let buffer;
+            this.bufferLoader = new BufferLoaderFoo(
+                this.context,
+                this.urls,
+                this.finishedLoadingLooper
+            );
 
-            // ファイルを取得 (arraybufferとして)
-            const request = new XMLHttpRequest();
-            request.open('GET', bufferUrls, true);
-            request.responseType = 'arraybuffer';
+            this.bufferLoader.load();
 
-            request.send();
-            request.onload = () => {
-                // 読み込みが終わったら、decodeしてbufferにいれておく
-                const res = request.response;
-                this.context.decodeAudioData(res, buf => {
-                    console.log("decode");
-                    buffer = buf;
-
-                    const foo  = this.context.createBufferSource();
-                    foo.buffer = buffer;
-
-                    const gainNode      = this.context.createGain();
-                    gainNode.gain.value = 1.0;
-
-                    foo.connect(gainNode);
-                    gainNode.connect(this.context.destination);
-                    foo.start(this.context.currentTime + 0.100);
-                });
-            };
-
-
-
-
-
-            /*
-             console.log(1);
-
-             foo.buffer = bufferUrls;
-
-             console.log(2);
-
-             const time = this.context.currentTime + 0.100;
-             this.playSound(foo.buffer, time);
-             */
         }
     }
 
@@ -158,6 +135,27 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
         this.bufferLoader.load();
     }
+
+    finishedLoadingLooper: any = (bufferList) => {
+
+        const bufferSources = [];
+
+        for (let i = 0; i < bufferList.length; i++) {
+            bufferSources[i]        = this.context.createBufferSource();
+            bufferSources[i].buffer = bufferList[i];
+        }
+
+        const startTime      = this.context.currentTime + 0.100;
+        const tempo          = 80; // BPM (beats per minute)
+        const eighthNoteTime = (60 / tempo) / 2;
+
+        const bar = 0;
+
+        for (let k = 0; k < bufferSources.length; k++) {
+            const time = startTime + bar * 8 * eighthNoteTime;
+            this.playSound(bufferSources[k].buffer, time);
+        }
+    };
 
     finishedLoading: any = (bufferList) => {
         // Create two sources and play them both together.
