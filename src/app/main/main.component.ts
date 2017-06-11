@@ -78,10 +78,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
                     const superBuffer: Blob         = new Blob(this.recordedChunks);
                     const recordingSoundUrl: string = window.URL.createObjectURL(superBuffer);
 
-                    const audio: HTMLAudioElement = new Audio(recordingSoundUrl);
-                    audio.play();
-
-                    // this.urls.push(recordingSoundUrl);
+                    this.urls.push(recordingSoundUrl);
                 }
             }
         }
@@ -91,19 +88,36 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             const bufferUrls = this.urls.shift();
             console.log(bufferUrls);
 
-            /*
-             const foo = this.context.createBufferSource();
-             console.log(  foo);
-             */
+            let buffer;
 
-            /*
-             const gainNode      = this.context.createGain();
-             gainNode.gain.value = 1.0;
+            // ファイルを取得 (arraybufferとして)
+            const request = new XMLHttpRequest();
+            request.open('GET', bufferUrls, true);
+            request.responseType = 'arraybuffer';
 
-             foo.connect(gainNode);
-             gainNode.connect(this.context.destination);
-             foo.start(this.context.currentTime + 0.100);
-             */
+            request.send();
+            request.onload = () => {
+                // 読み込みが終わったら、decodeしてbufferにいれておく
+                const res = request.response;
+                this.context.decodeAudioData(res, buf => {
+                    console.log("decode");
+                    buffer = buf;
+
+                    const foo  = this.context.createBufferSource();
+                    foo.buffer = buffer;
+
+                    const gainNode      = this.context.createGain();
+                    gainNode.gain.value = 1.0;
+
+                    foo.connect(gainNode);
+                    gainNode.connect(this.context.destination);
+                    foo.start(this.context.currentTime + 0.100);
+                });
+            };
+
+
+
+
 
             /*
              console.log(1);
