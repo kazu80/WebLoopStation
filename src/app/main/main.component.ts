@@ -52,7 +52,16 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             this.mediaRecorder                 = new MediaRecorder(stream, {mimeType: 'audio/webm'});
             this.mediaRecorder.ondataavailable = (event: any) => {
                 if (event.data.size > 0) {
-                    this.recordedChunks.push(event.data)
+                    this.recordedChunks.push(event.data);
+
+                    if (this.recordedChunks.length > 0) {
+                        const superBuffer: Blob         = new Blob(this.recordedChunks);
+                        const recordingSoundUrl: string = window.URL.createObjectURL(superBuffer);
+                        this.urls.push(recordingSoundUrl);
+                        this.recordedChunks = [];
+
+                        this.service_play.start = true;
+                    }
                 }
             };
 
@@ -67,7 +76,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
      */
     ngDoCheck() {
         if (this.service_user_media.user_media) {
-
             if (!this.service_recording.recording && this.service_recording.start) {
                 this.mediaRecorder.start();
                 this.service_recording.start     = false;
@@ -77,18 +85,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
                 this.mediaRecorder.stop();
                 this.service_recording.stop      = false;
                 this.service_recording.recording = false;
-
-                if (this.recordedChunks.length > 0) {
-                    const superBuffer: Blob         = new Blob(this.recordedChunks);
-                    const recordingSoundUrl: string = window.URL.createObjectURL(superBuffer);
-                    this.urls.push(recordingSoundUrl);
-
-                    console.log(this.urls);
-
-                    this.recordedChunks = [];
-
-                    this.service_play.start = true;
-                }
             }
         }
 
@@ -105,7 +101,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             );
 
             this.bufferLoader.load();
-
         }
     }
 
@@ -121,7 +116,8 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
      * play Rock Sound
      */
     public playRockSound() {
-        this.context = new AudioContext();
+        this.service_play.start = true;
+        this.context            = new AudioContext();
 
         this.bufferLoader = new BufferLoaderFoo(
             this.context,
@@ -137,7 +133,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     finishedLoadingLooper: any = (bufferList) => {
-
         const bufferSources = [];
 
         for (let i = 0; i < bufferList.length; i++) {
@@ -172,7 +167,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
         const tempo          = 80; // BPM (beats per minute)
         const eighthNoteTime = (60 / tempo) / 2;
 
-        for (let bar = 0; bar < 4; bar++) {
+        for (let bar = 0; bar < 2; bar++) {
             const time = startTime + bar * 8 * eighthNoteTime;
 
             // Play the bass (kick) drum on beats 1, 5
@@ -191,16 +186,14 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     };
 
     playSound(buffer, time) {
-        console.log("play sound!!");
-
         const source = this.context.createBufferSource();
-        // const source = this.context.createBuffer();
 
         const gainNode      = this.context.createGain();
         gainNode.gain.value = 0.5;
 
         source.buffer = buffer;
         source.connect(gainNode);
+
         gainNode.connect(this.context.destination);
         source.start(time);
     }

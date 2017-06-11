@@ -17,8 +17,8 @@ import {PlayService} from "./service/play.service";
   ],
   providers: [
     RecordingService,
-      UsermediaService,
-      PlayService
+    UsermediaService,
+    PlayService
   ],
   bootstrap: [MainComponent]
 })
