@@ -16,7 +16,7 @@ import {PlayService} from "../service/play.service";
     templateUrl: './main.component.html',
     styleUrls  : ['./main.component.scss']
 })
-export class MainComponent implements OnInit, AfterViewInit, DoCheck {
+export class MainComponent implements OnInit, AfterViewInit {
     public play                  = false;
     public rec                   = false;
     public time                  = 0;
@@ -41,9 +41,12 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     ngOnInit() {
         this.play = this.service_play.start;
         this.rec  = this.service_recording.recording;
+
+        console.log(document.documentElement.clientWidth);
     }
 
     ngAfterViewInit() {
+        /*
         //
         this.context = new AudioContext();
 
@@ -68,12 +71,14 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             this.service_recording.stream      = stream;
             this.service_user_media.user_media = true;
         });
+         */
     }
 
     /**
      * 変更チェックをngDoCheckで行なう。
      * AngularJS/Vueで言うところのwatch
      */
+    /*
     ngDoCheck() {
         if (this.service_user_media.user_media) {
             if (!this.service_recording.recording && this.service_recording.start) {
@@ -103,6 +108,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             this.bufferLoader.load();
         }
     }
+     */
 
     public clickLooper() {
         if (this.service_recording.recording) {

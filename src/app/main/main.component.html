@@ -1,12 +1,17 @@
 <div class="app-wrapper">
-    <div class="status-wrapper">
-        <div class="">Play:{{service_play.playing}}</div>
-        <div class="">Rec:{{service_recording.recording}}</div>
-    </div>
-    <div class="button-wrapper">
 
-        <button class="btn" (click)="clickLooper()"></button>
+    <section class="control">
+        <div class="button-wrapper">
+            <button class="btn btn-edit"></button>
+        </div>
 
-    </div>
+        <div class="button-wrapper">
+            <button class="btn btn-stop"></button>
+        </div>
+
+        <div class="button-wrapper">
+            <button class="btn btn-play" (click)="clickLooper()"></button>
+        </div>
+    </section>
 
 </div>
