@@ -17,34 +17,58 @@
     }
 }
 
+$green : #32cd32;
+$black : #34495e;
+$black-shadow : #2c3e50;
+$gray : #7f8c8d;
+$animation-time : 200ms;
+
 .btn {
-    border           : 1px solid #eeeeee;
-    border-radius    : 50%;
-    background-color : #aaaaff;
+    position            : relative;
+    top                 : 0;
+    border              : 15px solid $green;
+    border-radius       : 50%;
+    transition-duration : $animation-time;
+    transition-property : top;
 
     &:focus {
         outline : none;
     }
 
     &:active {
-        background-color : orange;
+        position : relative;
+        top      : 6px;
+
     }
 }
 
 .btn-edit {
+    @extend .black;
     width         : 200px;
     height        : 100px;
     border-radius : 10px;
 }
 
 .btn-stop {
+    @extend .black;
     width  : 200px;
     height : 200px;
 }
 
 .btn-play {
+    @extend .black;
     width  : 450px;
     height : 450px;
+}
+
+.black {
+    box-shadow : 0 6px $black-shadow;
+    background : $black;
+
+    &:active {
+        box-shadow : 0 0 $black-shadow;
+        background : $black;
+    }
 }
 
 
