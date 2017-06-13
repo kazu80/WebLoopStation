@@ -21,12 +21,15 @@ $green : #32cd32;
 $black : #34495e;
 $black-shadow : #2c3e50;
 $gray : #7f8c8d;
+$gray-light : #d3d3d3;
 $animation-time : 200ms;
 
 .btn {
     position            : relative;
     top                 : 0;
-    border              : 15px solid $green;
+    display             : flex;
+    justify-content     : center;
+    border              : 15px solid $gray-light;
     border-radius       : 50%;
     transition-duration : $animation-time;
     transition-property : top;
@@ -36,9 +39,26 @@ $animation-time : 200ms;
     }
 
     &:active {
-        position : relative;
-        top      : 6px;
+        position     : relative;
+        top          : 6px;
+        border-color : $green;
 
+        .icon-wrapper {
+            color : $green;
+        }
+    }
+
+    .icon-wrapper {
+        display         : flex;
+        flex-direction  : row;
+        justify-content : space-around;
+        width           : 50%;
+        color           : $gray-light;
+        font-size       : 70px;
+
+        i {
+            flex-grow : 1;
+        }
     }
 }
 
