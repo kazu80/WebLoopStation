@@ -33,7 +33,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     /** Looper params **/
     urls: any[] = [];
 
-    constructor(private service_recording: RecordingService,
+    constructor(public service_recording: RecordingService,
                 private service_user_media: UsermediaService,
                 private service_play: PlayService) {
     }
@@ -205,6 +205,8 @@ export class MainComponent implements OnInit, AfterViewInit {
     }
 
     public click(): void {
+
+        /*
         const stream = new Observable(observer => {
             let beat       = 0;
             const interval = setInterval(() => {
@@ -238,5 +240,12 @@ export class MainComponent implements OnInit, AfterViewInit {
 
                 console.log(this.play, this.beat, this.time);
             });
+         */
+
+        this.rec = !this.rec;
+
+        this.service_recording.recording = !this.service_recording.recording;
+        console.log(this.service_recording.recording);
+
     }
 }
