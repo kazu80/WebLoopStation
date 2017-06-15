@@ -25,6 +25,17 @@ $gray : #7f8c8d;
 $gray-light : #d3d3d3;
 $animation-time : 200ms;
 
+.button-wrapper {
+    margin  : 0;
+    padding : 0;
+    width   : 100%;
+
+    &.play {
+        display         : flex;
+        justify-content : center;
+    }
+}
+
 .btn {
     position            : relative;
     top                 : 0;
@@ -87,6 +98,10 @@ $animation-time : 200ms;
     @extend .black;
     width  : 200px;
     height : 200px;
+
+    .icon-wrapper {
+        font-size : 60px;
+    }
 }
 
 .btn-play {
