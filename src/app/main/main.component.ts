@@ -16,7 +16,7 @@ import {PlayService} from "../service/play.service";
     templateUrl: './main.component.html',
     styleUrls  : ['./main.component.scss']
 })
-export class MainComponent implements OnInit, AfterViewInit {
+export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     public play                  = false;
     public rec                   = false;
     public time                  = 0;
@@ -41,11 +41,34 @@ export class MainComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.play = this.service_play.start;
         this.rec  = this.service_recording.recording;
-
-        console.log(document.documentElement.clientWidth);
     }
 
     ngAfterViewInit() {
+
+        const audioctx = new AudioContext();
+
+        let astream, micsrc;
+
+        const conditions = {audio: true, video: false};
+
+        const Mic = () => {
+            navigator.getUserMedia(
+                conditions,
+                (stream) => {
+                    astream = stream;
+                    micsrc  = audioctx.createMediaStreamSource(stream);
+                    micsrc.connect(audioctx.destination);
+                    // micsrc.connect(analyser);
+                },
+                (e) => {
+                    console.error(e);
+                }
+            );
+        };
+
+        // Mic Start
+        // Mic();
+
         /*
         //
         this.context = new AudioContext();
@@ -78,7 +101,6 @@ export class MainComponent implements OnInit, AfterViewInit {
      * 変更チェックをngDoCheckで行なう。
      * AngularJS/Vueで言うところのwatch
      */
-    /*
     ngDoCheck() {
         if (this.service_user_media.user_media) {
             if (!this.service_recording.recording && this.service_recording.start) {
@@ -108,7 +130,6 @@ export class MainComponent implements OnInit, AfterViewInit {
             this.bufferLoader.load();
         }
     }
-     */
 
     public clickLooper() {
         if (this.service_recording.recording) {
