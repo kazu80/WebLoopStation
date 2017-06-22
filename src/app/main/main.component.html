@@ -2,7 +2,7 @@
 
     <section class="control">
         <div class="button-wrapper">
-            <button class="btn btn-edit">EDIT</button>
+            <button class="btn btn-mic" (click)="clickMic()" [ngClass]="{'active': service_mic.isMic}">MIC</button>
         </div>
 
         <div class="button-wrapper">

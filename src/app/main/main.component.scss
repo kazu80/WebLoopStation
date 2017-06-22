@@ -84,6 +84,7 @@ $animation-time : 200ms;
     }
 }
 
+.btn-mic,
 .btn-edit {
     @extend .black;
     width          : 200px;
@@ -92,6 +93,11 @@ $animation-time : 200ms;
     color          : $gray-light;
     font-size      : 36px;
     letter-spacing : 5px;
+
+    &.active {
+        border-color : $green;
+        color        : $green;
+    }
 }
 
 .btn-stop {

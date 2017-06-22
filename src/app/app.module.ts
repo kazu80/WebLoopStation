@@ -5,6 +5,7 @@ import { MainComponent } from './main/main.component';
 import {RecordingService} from "./service/recording.service";
 import {UsermediaService} from "./service/usermedia.service";
 import {PlayService} from "./service/play.service";
+import {MicService} from "./service/mic.service";
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import {PlayService} from "./service/play.service";
   providers: [
     RecordingService,
     UsermediaService,
-    PlayService
+    PlayService,
+    MicService
   ],
   bootstrap: [MainComponent]
 })

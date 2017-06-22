@@ -10,6 +10,7 @@ import {UsermediaService} from "../service/usermedia.service";
 
 import {BufferLoaderFoo} from '../lib/BufferLoaderFoo';
 import {PlayService} from "../service/play.service";
+import {MicService} from "../service/mic.service";
 
 @Component({
     selector   : 'app-main',
@@ -35,7 +36,8 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
     constructor(public service_recording: RecordingService,
                 private service_user_media: UsermediaService,
-                private service_play: PlayService) {
+                private service_play: PlayService,
+                private service_mic: MicService) {
     }
 
     ngOnInit() {
@@ -45,29 +47,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
     ngAfterViewInit() {
 
-        const audioctx = new AudioContext();
 
-        let astream, micsrc;
-
-        const conditions = {audio: true, video: false};
-
-        const Mic = () => {
-            navigator.getUserMedia(
-                conditions,
-                (stream) => {
-                    astream = stream;
-                    micsrc  = audioctx.createMediaStreamSource(stream);
-                    micsrc.connect(audioctx.destination);
-                    // micsrc.connect(analyser);
-                },
-                (e) => {
-                    console.error(e);
-                }
-            );
-        };
-
-        // Mic Start
-        // Mic();
 
         /*
         //
@@ -129,6 +109,17 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
             this.bufferLoader.load();
         }
+
+        if (this.service_mic.isMic) {
+            // Mic Start
+            this.service_mic.mic();
+        } else if (this.service_mic.stream) {
+            (this.service_mic.stream.getTracks())[0].stop();
+        }
+    }
+
+    public clickMic() {
+        this.service_mic.isMic = !this.service_mic.isMic;
     }
 
     public clickLooper() {
