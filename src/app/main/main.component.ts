@@ -46,9 +46,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     ngAfterViewInit() {
-
-
-
         /*
         //
         this.context = new AudioContext();
@@ -111,10 +108,9 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
         }
 
         if (this.service_mic.isMic) {
-            // Mic Start
-            this.service_mic.mic();
+            this.service_mic.on();
         } else if (this.service_mic.stream) {
-            (this.service_mic.stream.getTracks())[0].stop();
+            this.service_mic.off();
         }
     }
 
