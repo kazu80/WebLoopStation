@@ -30,6 +30,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     kick: any;
     snare: any;
     hihat: any;
+    analyzeCanvas: HTMLElement;
 
     /** Looper params **/
     urls: any[] = [];
@@ -46,32 +47,11 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     ngAfterViewInit() {
-        /*
+        // analyze canvas
+        this.analyzeCanvas = document.getElementById("analyze");
+
         //
-        this.context = new AudioContext();
-
-        // Get User Media
-        navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(stream => {
-            this.mediaRecorder                 = new MediaRecorder(stream, {mimeType: 'audio/webm'});
-            this.mediaRecorder.ondataavailable = (event: any) => {
-                if (event.data.size > 0) {
-                    this.recordedChunks.push(event.data);
-
-                    if (this.recordedChunks.length > 0) {
-                        const superBuffer: Blob         = new Blob(this.recordedChunks);
-                        const recordingSoundUrl: string = window.URL.createObjectURL(superBuffer);
-                        this.urls.push(recordingSoundUrl);
-                        this.recordedChunks = [];
-
-                        this.service_play.start = true;
-                    }
-                }
-            };
-
-            this.service_recording.stream      = stream;
-            this.service_user_media.user_media = true;
-        });
-         */
+        this.service_mic.analyze(this.analyzeCanvas);
     }
 
     /**
@@ -107,7 +87,8 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             this.bufferLoader.load();
         }
 
-        if (this.service_mic.isMic) {
+        if (this.service_mic.isMic && !this.service_mic.stream) {
+            console.log("foo");
             this.service_mic.on();
         } else if (this.service_mic.stream) {
             this.service_mic.off();

@@ -149,6 +149,16 @@ $animation-time : 200ms;
     }
 }
 
+.mic-control-wrapper {
+    display         : flex;
+    flex-direction  : row;
+    justify-content : space-between;
 
+    .analyze {
+        width  : 300px;
+        height : 200px;
+        border : 2px solid #34495e;
+    }
+}
 
 
