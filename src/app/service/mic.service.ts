@@ -8,11 +8,13 @@ export class MicService {
     private _analyzeMode: number;
     private _analyze: any;
     private _timerId: any;
+    private _isUserMedia: boolean;
 
     constructor() {
         this._analyzeMode = 0;
         this._audioctx    = new AudioContext;
         this._analyze     = this._audioctx.createAnalyser();
+        this._isUserMedia = false;
     }
 
     get isMic(): boolean {
@@ -27,7 +29,13 @@ export class MicService {
         return this._stream;
     }
 
+    get isUserMedia(): boolean {
+        return this._isUserMedia;
+    }
+
     on() {
+        this._isUserMedia = true;
+
         navigator.getUserMedia(
             {audio: true, video: false},
             (mediaStream) => {
@@ -44,6 +52,8 @@ export class MicService {
     off() {
         (this._stream.getTracks())[0].stop();
         cancelAnimationFrame(this._timerId);
+        this._stream      = null;
+        this._isUserMedia = false;
     }
 
     analyze(canvas: any) {
