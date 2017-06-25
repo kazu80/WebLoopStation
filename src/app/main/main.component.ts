@@ -88,7 +88,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
         }
 
         if (this.service_mic.isMic && !this.service_mic.stream) {
-            console.log("foo");
             this.service_mic.on();
         } else if (this.service_mic.stream) {
             this.service_mic.off();

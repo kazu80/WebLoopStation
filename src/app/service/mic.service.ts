@@ -28,13 +28,11 @@ export class MicService {
     }
 
     on() {
-        console.log("bar");
         navigator.getUserMedia(
             {audio: true, video: false},
             (mediaStream) => {
                 this._stream = mediaStream;
                 const micsrc = this._audioctx.createMediaStreamSource(mediaStream);
-                micsrc.connect(this._audioctx.destination);
                 micsrc.connect(this._analyze);
             },
             (e) => {
