@@ -59,18 +59,17 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
      * AngularJS/Vueで言うところのwatch
      */
     ngDoCheck() {
-        if (this.service_user_media.user_media) {
-            if (!this.service_recording.recording && this.service_recording.start) {
-                this.mediaRecorder.start();
-                this.service_recording.start     = false;
-                this.service_recording.recording = true;
+        if (!this.service_recording.recording && this.service_recording.start) {
+            // this.mediaRecorder.start();
+            this.service_recording.start     = false;
+            this.service_recording.recording = true;
 
-            } else if (this.service_recording.recording && this.service_recording.stop) {
-                this.mediaRecorder.stop();
-                this.service_recording.stop      = false;
-                this.service_recording.recording = false;
-            }
+        } else if (this.service_recording.recording && this.service_recording.stop) {
+            // this.mediaRecorder.stop();
+            this.service_recording.stop      = false;
+            this.service_recording.recording = false;
         }
+
 
         if (this.service_play.start === true) {
             this.service_play.start   = false;
@@ -99,9 +98,9 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     public clickLooper() {
-        if (this.service_recording.recording) {
+        if (this.service_mic.isMic === true && this.service_recording.recording) {
             this.service_recording.stop = true;
-        } else {
+        } else if (this.service_mic.isMic === true) {
             this.service_recording.start = true;
         }
     }
