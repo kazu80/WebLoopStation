@@ -7,7 +7,11 @@ export class RecordingService {
     private _start: any = false;
     private _stop: any = false;
 
+    private _mediaRecorder: any;
+    private _chunks: any[] = [];
+
     constructor() {
+
     }
 
     get recording(): boolean {
@@ -40,5 +44,35 @@ export class RecordingService {
 
     set stop(value: any) {
         this._stop = value;
+    }
+
+    public on(stream: MediaStream) {
+        console.log('MediaRecorder On');
+        this._mediaRecorder = new MediaRecorder(stream);
+        this._mediaRecorder.start();
+
+        this._mediaRecorder.onstart = (e) => {
+            console.log("onstart");
+        };
+
+        this._mediaRecorder.ondataavailable = (e) => {
+            console.log("foo");
+            this._chunks.push(e.data);
+        };
+
+        this._mediaRecorder.onstop = (e) => {
+
+            console.log('MediaRecorder OnStop');
+
+            const blob     = new Blob(this._chunks, {'type': 'audio/ogg; codecs=opus'});
+            const audioURL = URL.createObjectURL(blob);
+
+            console.log(audioURL);
+        };
+    }
+
+    public off() {
+        console.log('MediaRecorder Off');
+        this._mediaRecorder.stop();
     }
 }

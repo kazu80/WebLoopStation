@@ -60,14 +60,14 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
      */
     ngDoCheck() {
         if (!this.service_recording.recording && this.service_recording.start) {
-            // this.mediaRecorder.start();
             this.service_recording.start     = false;
             this.service_recording.recording = true;
+            this.service_recording.on(this.service_mic.stream);
 
         } else if (this.service_recording.recording && this.service_recording.stop) {
-            // this.mediaRecorder.stop();
             this.service_recording.stop      = false;
             this.service_recording.recording = false;
+            this.service_recording.off();
         }
 
 
