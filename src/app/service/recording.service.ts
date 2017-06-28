@@ -52,27 +52,25 @@ export class RecordingService {
         this._mediaRecorder.start();
 
         this._mediaRecorder.onstart = (e) => {
-            console.log("onstart");
         };
 
         this._mediaRecorder.ondataavailable = (e) => {
-            console.log("foo");
             this._chunks.push(e.data);
         };
 
         this._mediaRecorder.onstop = (e) => {
-
-            console.log('MediaRecorder OnStop');
-
             const blob     = new Blob(this._chunks, {'type': 'audio/ogg; codecs=opus'});
             const audioURL = URL.createObjectURL(blob);
 
-            console.log(audioURL);
+            // temp play sound
+            setTimeout(() => {
+                const audio: HTMLAudioElement = new Audio(audioURL);
+                audio.play();
+            }, 600);
         };
     }
 
     public off() {
-        console.log('MediaRecorder Off');
         this._mediaRecorder.stop();
     }
 }
