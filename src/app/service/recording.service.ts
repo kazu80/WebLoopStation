@@ -9,9 +9,10 @@ export class RecordingService {
 
     private _mediaRecorder: any;
     private _chunks: any[] = [];
+    private _audioURL: string | null;
 
     constructor() {
-
+        this._audioURL = null;
     }
 
     get recording(): boolean {
@@ -46,6 +47,14 @@ export class RecordingService {
         this._stop = value;
     }
 
+    get audioURL(): string {
+        return this._audioURL;
+    }
+
+    set audioURL(value: string) {
+        this._audioURL = value;
+    }
+
     public on(stream: MediaStream) {
         console.log('MediaRecorder On');
         this._mediaRecorder = new MediaRecorder(stream);
@@ -67,6 +76,8 @@ export class RecordingService {
                 const audio: HTMLAudioElement = new Audio(audioURL);
                 audio.play();
             }, 600);
+
+            this._audioURL = audioURL;
         };
     }
 

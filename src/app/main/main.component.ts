@@ -59,6 +59,14 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
      * AngularJS/Vueで言うところのwatch
      */
     ngDoCheck() {
+        if (this.service_recording.audioURL) {
+            const audioURL: string          = this.service_recording.audioURL;
+            this.service_recording.audioURL = null;
+
+            console.log(audioURL);
+        }
+
+
         if (!this.service_recording.recording && this.service_recording.start) {
             this.service_recording.start     = false;
             this.service_recording.recording = true;
@@ -69,7 +77,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             this.service_recording.recording = false;
             this.service_recording.off();
         }
-
 
         if (this.service_play.start === true) {
             this.service_play.start   = false;
