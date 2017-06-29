@@ -42,8 +42,9 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     ngOnInit() {
-        this.play = this.service_play.start;
-        this.rec  = this.service_recording.recording;
+        this.play    = this.service_play.start;
+        this.rec     = this.service_recording.recording;
+        this.context = new AudioContext();
     }
 
     ngAfterViewInit() {
@@ -63,7 +64,15 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             const audioURL: string          = this.service_recording.audioURL;
             this.service_recording.audioURL = null;
 
-            console.log(audioURL);
+            this.bufferLoader = new BufferLoaderFoo(
+                this.context,
+                [
+                    audioURL
+                ],
+                this.finishedLoadingLooper
+            );
+
+            this.bufferLoader.load();
         }
 
 
