@@ -31,6 +31,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     snare: any;
     hihat: any;
     analyzeCanvas: HTMLElement;
+    source: any;
 
     /** Looper params **/
     urls: any[] = [];
@@ -195,16 +196,28 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     };
 
     playSound(buffer, time) {
-        const source = this.context.createBufferSource();
+        this.source = this.context.createBufferSource();
 
         const gainNode      = this.context.createGain();
         gainNode.gain.value = 0.5;
 
-        source.buffer = buffer;
-        source.connect(gainNode);
+        this.source.buffer = buffer;
+        this.source.connect(gainNode);
+
+        console.log(buffer.duration); // 音の長さ？
 
         gainNode.connect(this.context.destination);
-        source.start(time);
+
+        this.source.loop = true;
+
+
+        this.source.start(time);
+    }
+
+    stopSound() {
+
+
+        this.source.stop();
     }
 
     public click(): void {
