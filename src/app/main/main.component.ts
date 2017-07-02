@@ -159,6 +159,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
         for (let k = 0; k < bufferSources.length; k++) {
             const time = startTime + bar * 8 * eighthNoteTime;
+
             this.playSound(bufferSources[k].buffer, time);
         }
     };
@@ -197,28 +198,11 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     };
 
     playSound(buffer, time) {
-        this.source = this.context.createBufferSource();
-
-        const gainNode      = this.context.createGain();
-        gainNode.gain.value = 0.5;
-
-        this.source.buffer = buffer;
-        this.source.connect(gainNode);
-
-        console.log(buffer.duration); // 音の長さ？
-
-        gainNode.connect(this.context.destination);
-
-        this.source.loop = true;
-
-
-        this.source.start(time);
+        this.source = this.service_play.playSound(buffer, time);
     }
 
     stopSound() {
-
-
-        this.source.stop();
+        this.service_play.stopSound(this.source);
     }
 
     public click(): void {
