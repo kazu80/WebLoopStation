@@ -8,11 +8,12 @@ export class RecordingService {
     private _stop: any = false;
 
     private _mediaRecorder: any;
-    private _chunks: any[] = [];
+    private _chunks: any[];
     private _audioURL: string | null;
 
     constructor() {
         this._audioURL = null;
+        this._chunks   = [];
     }
 
     get recording(): boolean {
@@ -68,15 +69,8 @@ export class RecordingService {
         };
 
         this._mediaRecorder.onstop = (e) => {
-            const blob     = new Blob(this._chunks, {'type': 'audio/ogg; codecs=opus'});
-
-            // temp play sound
-            /*
-            setTimeout(() => {
-                const audio: HTMLAudioElement = new Audio(audioURL);
-                audio.play();
-            }, 600);
-             */
+            const blob   = new Blob(this._chunks, {'type': 'audio/ogg; codecs=opus'});
+            this._chunks = [];
 
             this._audioURL = URL.createObjectURL(blob);
         };
