@@ -18,6 +18,7 @@
     }
 }
 
+$red : #ff0033;
 $green : #32cd32;
 $black : #34495e;
 $black-shadow : #2c3e50;
@@ -135,6 +136,29 @@ $animation-time : 200ms;
 
         .icon-wrapper {
             color : $green;
+        }
+    }
+
+    &.over {
+        border-color : $red;
+
+        &:focus {
+            border-color : $red;
+            .icon-wrapper {
+                color : $red;
+            }
+        }
+
+        &:active {
+            border-color : $gray-light;
+
+            .icon-wrapper {
+                color : $gray-light;
+            }
+        }
+
+        .icon-wrapper {
+            color : $red;
         }
     }
 }

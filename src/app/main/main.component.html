@@ -20,7 +20,7 @@
         </div>
 
         <div class="button-wrapper play">
-            <button class="btn btn-play dark_blue" [class.active]="service_recording.recording" (click)="clickLooper()">
+            <button class="btn btn-play dark_blue" [class.active]="service_recording.recording" [class.over]="service_recording.recording && service_play.soundDuration > 0" (click)="clickLooper()">
                 <div class="icon-wrapper">
                     <i class="fa fa-play" aria-hidden="true"> </i>
                     <i class="fa fa-stop" aria-hidden="true"> </i>

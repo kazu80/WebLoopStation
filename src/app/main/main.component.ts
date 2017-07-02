@@ -38,7 +38,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
     constructor(public service_recording: RecordingService,
                 private service_user_media: UsermediaService,
-                private service_play: PlayService,
+                public service_play: PlayService,
                 private service_mic: MicService) {
     }
 
