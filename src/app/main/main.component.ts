@@ -62,14 +62,15 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
      */
     ngDoCheck() {
         if (this.service_recording.audioURL) {
+            const audioURLs: string[]       = [];
             const audioURL: string          = this.service_recording.audioURL;
             this.service_recording.audioURL = null;
 
+            audioURLs.push(audioURL);
+
             this.bufferLoader = new BufferLoaderFoo(
                 this.context,
-                [
-                    audioURL
-                ],
+                audioURLs,
                 this.finishedLoadingLooper
             );
 
