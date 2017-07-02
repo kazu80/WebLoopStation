@@ -8,10 +8,12 @@ export class PlayService {
     private _stop: any    = false;
 
     private _sources: any[];
+    private _soundDuration: number;
 
     constructor() {
-        this._context = new AudioContext;
-        this._sources = [];
+        this._context       = new AudioContext;
+        this._sources       = [];
+        this._soundDuration = 0;
     }
 
     get playing(): any {
@@ -38,8 +40,16 @@ export class PlayService {
         this._stop = value;
     }
 
+    get soundDuration(): number {
+        return this._soundDuration;
+    }
+
     playSound(buffer, time) {
         const source = this._context.createBufferSource();
+
+        if (this._soundDuration === 0) {
+            this._soundDuration = buffer.duration * 1000;
+        }
 
         source.buffer = buffer;
         source.loop   = true;
@@ -58,7 +68,8 @@ export class PlayService {
             source.stop();
         }
 
-        this._sources = [];
+        this._sources       = [];
+        this._soundDuration = 0;
     }
 
     createGain(context: AudioContext): GainNode {

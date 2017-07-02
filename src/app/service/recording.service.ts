@@ -56,8 +56,7 @@ export class RecordingService {
         this._audioURL = value;
     }
 
-    public on(stream: MediaStream) {
-        console.log('MediaRecorder On');
+    public on(stream: MediaStream, time?: number) {
         this._mediaRecorder = new MediaRecorder(stream);
         this._mediaRecorder.start();
 

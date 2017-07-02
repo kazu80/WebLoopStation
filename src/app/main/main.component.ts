@@ -77,11 +77,18 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             this.bufferLoader.load();
         }
 
-
         if (!this.service_recording.recording && this.service_recording.start) {
             this.service_recording.start     = false;
             this.service_recording.recording = true;
             this.service_recording.on(this.service_mic.stream);
+
+            if (this.service_play.soundDuration > 0) {
+                setTimeout(() => {
+                    this.service_recording.stop      = false;
+                    this.service_recording.recording = false;
+                    this.service_recording.off();
+                }, this.service_play.soundDuration);
+            }
 
         } else if (this.service_recording.recording && this.service_recording.stop) {
             this.service_recording.stop      = false;
