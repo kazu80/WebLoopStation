@@ -144,23 +144,13 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     finishedLoadingLooper: any = (bufferList) => {
-        const bufferSources = [];
+        const bufferSources: AudioBufferSourceNode[] = [];
 
         for (let i = 0; i < bufferList.length; i++) {
             bufferSources[i]        = this.context.createBufferSource();
             bufferSources[i].buffer = bufferList[i];
-        }
 
-        const startTime      = this.context.currentTime + 0.100;
-        const tempo          = 80; // BPM (beats per minute)
-        const eighthNoteTime = (60 / tempo) / 2;
-
-        const bar = 0;
-
-        for (let k = 0; k < bufferSources.length; k++) {
-            const time = startTime + bar * 8 * eighthNoteTime;
-
-            this.playSound(bufferSources[k].buffer, time);
+            this.playSound(bufferSources[i].buffer, 0);
         }
     };
 
@@ -202,7 +192,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     stopSound() {
-        this.service_play.stopSound(this.source);
+        this.service_play.stopSound();
     }
 
     public click(): void {
