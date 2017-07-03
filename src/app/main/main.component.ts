@@ -140,26 +140,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
         }
     }
 
-    /**
-     * play Rock Sound
-     */
-    public playRockSound() {
-        this.service_play.start = true;
-        this.context            = new AudioContext();
-
-        this.bufferLoader = new BufferLoaderFoo(
-            this.context,
-            [
-                '/assets/sounds/hihat.mp3',
-                '/assets/sounds/kick.mp3',
-                '/assets/sounds/snare.mp3'
-            ],
-            this.finishedLoading
-        );
-
-        this.bufferLoader.load();
-    }
-
     finishedLoadingLooper: any = (bufferList) => {
         const bufferSources: AudioBufferSourceNode[] = [];
 
@@ -168,39 +148,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             bufferSources[i].buffer = bufferList[i];
 
             this.playSound(bufferSources[i].buffer, 0);
-        }
-    };
-
-    finishedLoading: any = (bufferList) => {
-        // Create two sources and play them both together.
-        this.kick  = this.context.createBufferSource();
-        this.snare = this.context.createBufferSource();
-        this.hihat = this.context.createBufferSource();
-
-        this.hihat.buffer = bufferList[0];
-        this.kick.buffer  = bufferList[1];
-        this.snare.buffer = bufferList[2];
-
-        // We'll start playing the rhythm 100 milliseconds from "now"
-        const startTime      = this.context.currentTime + 0.100;
-        const tempo          = 80; // BPM (beats per minute)
-        const eighthNoteTime = (60 / tempo) / 2;
-
-        for (let bar = 0; bar < 2; bar++) {
-            const time = startTime + bar * 8 * eighthNoteTime;
-
-            // Play the bass (kick) drum on beats 1, 5
-            this.playSound(this.kick.buffer, time);
-            this.playSound(this.kick.buffer, time + 4 * eighthNoteTime);
-
-            // Play the snare drum on beats 3, 7
-            this.playSound(this.snare.buffer, time + 2 * eighthNoteTime);
-            this.playSound(this.snare.buffer, time + 6 * eighthNoteTime);
-
-            // Play the hi-hat every eighth note.
-            for (let i = 0; i < 8; ++i) {
-                this.playSound(this.hihat.buffer, time + i * eighthNoteTime);
-            }
         }
     };
 
