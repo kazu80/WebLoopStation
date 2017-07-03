@@ -33,9 +33,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     analyzeCanvas: HTMLElement;
     source: any;
 
-    /** Looper params **/
-    urls: any[] = [];
-
     constructor(public service_recording: RecordingService,
                 private service_user_media: UsermediaService,
                 public service_play: PlayService,
@@ -61,22 +58,27 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
      * AngularJS/Vueで言うところのwatch
      */
     ngDoCheck() {
+
+        // audioURL
         if (this.service_recording.audioURL) {
-            const audioURLs: string[]       = [];
+            // const audioURLs: string[]       = [];
             const audioURL: string          = this.service_recording.audioURL;
             this.service_recording.audioURL = null;
 
-            audioURLs.push(audioURL);
+            // audioURLs.push(audioURL);
+            this.service_play.setAudioURLs(audioURL);
 
             this.bufferLoader = new BufferLoaderFoo(
                 this.context,
-                audioURLs,
+                this.service_play.audioURLs,
+                // audioURLs,
                 this.finishedLoadingLooper
             );
 
             this.bufferLoader.load();
         }
 
+        // Recording Start / Stop
         if (!this.service_recording.recording && this.service_recording.start) {
             this.service_recording.start     = false;
             this.service_recording.recording = true;
@@ -96,27 +98,14 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             this.service_recording.off();
         }
 
-        if (this.service_play.start === true) {
-            this.service_play.start   = false;
-            this.service_play.playing = true;
-
-            this.context = new AudioContext();
-
-            this.bufferLoader = new BufferLoaderFoo(
-                this.context,
-                this.urls,
-                this.finishedLoadingLooper
-            );
-
-            this.bufferLoader.load();
-        }
-
+        // mic ON / OFF
         if (this.service_mic.isMic === true && !this.service_mic.stream && this.service_mic.isUserMedia === false) {
             this.service_mic.on();
         } else if (this.service_mic.isMic === false && this.service_mic.stream) {
             this.service_mic.off();
         }
 
+        // Destination
         if (this.service_mic.isDestination === true && this.service_mic.stream) {
             this.service_mic.destinationConnect();
         } else if (this.service_mic.isDestination === false && this.service_mic.stream) {
@@ -147,60 +136,11 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             bufferSources[i]        = this.context.createBufferSource();
             bufferSources[i].buffer = bufferList[i];
 
-            this.playSound(bufferSources[i].buffer, 0);
+            this.service_play.playSound(bufferSources[i].buffer, 0);
         }
     };
 
-    playSound(buffer, time) {
-        this.source = this.service_play.playSound(buffer, time);
-    }
-
     stopSound() {
         this.service_play.stopSound();
-    }
-
-    public click(): void {
-
-        /*
-        const stream = new Observable(observer => {
-            let beat       = 0;
-            const interval = setInterval(() => {
-                observer.next([this.play, beat++]);
-            }, 1000);
-
-            return () => {
-                clearInterval(interval);
-            }
-        });
-
-        stream
-            .map(value => {
-                value[0] = !value[0];
-                return value;
-            })
-            .subscribe((value) => {
-                this.play = value[0];
-                this.beat = value[1];
-
-                if (value[1] % 4 === 0) {
-                    this.time++;
-                    this.service_recording.recording = !this.service_recording.recording;
-
-                    if (this.service_recording.recording) {
-                        this.service_recording.start = true;
-                    } else {
-                        this.service_recording.stop = true;
-                    }
-                }
-
-                console.log(this.play, this.beat, this.time);
-            });
-         */
-
-        this.rec = !this.rec;
-
-        this.service_recording.recording = !this.service_recording.recording;
-        console.log(this.service_recording.recording);
-
     }
 }

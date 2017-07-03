@@ -10,10 +10,13 @@ export class PlayService {
     private _sources: any[];
     private _soundDuration: number;
 
+    private _audioURLs: string[];
+
     constructor() {
         this._context       = new AudioContext;
         this._sources       = [];
         this._soundDuration = 0;
+        this._audioURLs     = [];
     }
 
     get playing(): any {
@@ -42,6 +45,10 @@ export class PlayService {
 
     get soundDuration(): number {
         return this._soundDuration;
+    }
+
+    get audioURLs(): string[] {
+        return this._audioURLs;
     }
 
     playSound(buffer, time) {
@@ -77,5 +84,9 @@ export class PlayService {
         gainNode.gain.value = 0.5;
         gainNode.connect(context.destination);
         return gainNode
+    }
+
+    public setAudioURLs(url: string): void {
+        this._audioURLs.push(url);
     }
 }
