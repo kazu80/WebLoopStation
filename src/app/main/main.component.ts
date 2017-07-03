@@ -39,7 +39,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     constructor(public service_recording: RecordingService,
                 private service_user_media: UsermediaService,
                 public service_play: PlayService,
-                private service_mic: MicService) {
+                public service_mic: MicService) {
     }
 
     ngOnInit() {
@@ -116,10 +116,20 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
         } else if (this.service_mic.isMic === false && this.service_mic.stream) {
             this.service_mic.off();
         }
+
+        if (this.service_mic.isDestination === true && this.service_mic.stream) {
+            this.service_mic.destinationConnect();
+        } else if (this.service_mic.isDestination === false && this.service_mic.stream) {
+            this.service_mic.destinationDisconnect();
+        }
     }
 
     public clickMic() {
         this.service_mic.isMic = !this.service_mic.isMic;
+    }
+
+    public clickDestination() {
+        this.service_mic.isDestination = !this.service_mic.isDestination;
     }
 
     public clickLooper() {

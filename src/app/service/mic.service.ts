@@ -9,12 +9,15 @@ export class MicService {
     private _analyze: any;
     private _timerId: any;
     private _isUserMedia: boolean;
+    private _isDestination: boolean;
+    private _micsrc: any;
 
     constructor() {
-        this._analyzeMode = 0;
-        this._audioctx    = new AudioContext;
-        this._analyze     = this._audioctx.createAnalyser();
-        this._isUserMedia = false;
+        this._analyzeMode   = 0;
+        this._audioctx      = new AudioContext;
+        this._analyze       = this._audioctx.createAnalyser();
+        this._isUserMedia   = false;
+        this._isDestination = false;
     }
 
     get isMic(): boolean {
@@ -25,12 +28,32 @@ export class MicService {
         this._isMic = value;
     }
 
+    get isDestination(): boolean {
+        return this._isDestination;
+    }
+
+    set isDestination(value: boolean) {
+        this._isDestination = value;
+    }
+
     get stream(): any {
         return this._stream;
     }
 
     get isUserMedia(): boolean {
         return this._isUserMedia;
+    }
+
+    destinationConnect() {
+        this._micsrc = this._audioctx.createMediaStreamSource(this._stream);
+        this._micsrc.connect(this._audioctx.destination);
+    }
+
+    destinationDisconnect() {
+        if (this._micsrc) {
+            this._micsrc.disconnect();
+            this._micsrc = null;
+        }
     }
 
     on() {
@@ -52,8 +75,9 @@ export class MicService {
     off() {
         (this._stream.getTracks())[0].stop();
         cancelAnimationFrame(this._timerId);
-        this._stream      = null;
-        this._isUserMedia = false;
+        this._stream        = null;
+        this._isUserMedia   = false;
+        this._isDestination = false;
     }
 
     analyze(canvas: any) {

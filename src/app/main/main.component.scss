@@ -101,6 +101,11 @@ $animation-time : 200ms;
     }
 }
 
+.btn-mic {
+    width        : 50%;
+    border-width : 10px;
+}
+
 .btn-stop {
     @extend .black;
     width  : 200px;
@@ -111,6 +116,7 @@ $animation-time : 200ms;
     }
 }
 
+.btn-destination,
 .btn-play {
     @extend .black;
     width  : 450px;
@@ -163,6 +169,12 @@ $animation-time : 200ms;
     }
 }
 
+.btn-destination {
+    width        : 100px;
+    height       : 100px;
+    border-width : 10px;
+}
+
 .black {
     box-shadow : 0 6px $black-shadow;
     background : $black;
@@ -177,11 +189,27 @@ $animation-time : 200ms;
     display         : flex;
     flex-direction  : row;
     justify-content : space-between;
+    width           : 100%;
 
-    .analyze {
-        width  : 300px;
-        height : 200px;
-        border : 2px solid #34495e;
+    .analyze-wrapper {
+        width : 50%;
+
+        .analyze {
+            width  : 100%;
+            height : 200px;
+            border : 2px solid #34495e;
+        }
+    }
+
+    .button-wrapper {
+        display         : flex;
+        flex-direction  : row;
+        justify-content : space-around;
+        width           : 50%;
+
+        .icon-destination {
+            font-size : 50px;
+        }
     }
 }
 
