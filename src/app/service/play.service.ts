@@ -54,24 +54,6 @@ export class PlayService {
         return this._audioURLs;
     }
 
-    playSound(buffer, time) {
-        const source = this._context.createBufferSource();
-
-        if (this._soundDuration === 0) {
-            this._soundDuration = buffer.duration * 1000;
-        }
-
-        source.buffer = buffer;
-        source.loop   = true;
-
-        source.connect(this.createGain(this._context));
-        source.start(time);
-
-        this._sources.push(source);
-
-        return source;
-    }
-
     stopSound() {
         for (let i = 0; i < this._sources.length; i++) {
             const source = this._sources[i];
@@ -97,6 +79,8 @@ export class PlayService {
     }
 
     public playAudio(context: AudioContext): void {
+
+        // audioURLsの中で既にLoadしているのはもうLoadしない。これをBufferLoaderのなかで制御する
         const bufferLoader = new BufferLoaderFoo(
             context,
             this._audioURLs,
@@ -114,4 +98,23 @@ export class PlayService {
 
         bufferLoader.load();
     }
+
+    public playSound(buffer, time) {
+        const source = this._context.createBufferSource();
+
+        if (this._soundDuration === 0) {
+            this._soundDuration = buffer.duration * 1000;
+        }
+
+        source.buffer = buffer;
+        source.loop   = true;
+
+        source.connect(this.createGain(this._context));
+        source.start(time);
+
+        this._sources.push(source);
+
+        return source;
+    }
+
 }

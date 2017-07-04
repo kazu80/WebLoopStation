@@ -21,7 +21,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     public play: boolean;
     public rec: boolean;
     public context: AudioContext;
-    public bufferLoader: any;
     public analyzeCanvas: HTMLElement;
 
     constructor(public service_recording: RecordingService,
@@ -115,7 +114,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
         }
     }
 
-    stopSound() {
+    public stopSound() {
         this.service_play.stopSound();
         this.service_play.resetSoundParam();
     }
