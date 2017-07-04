@@ -61,17 +61,19 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
         // audioURL
         if (this.service_recording.audioURL) {
-            // const audioURLs: string[]       = [];
+
+            //
+            this.service_play.stopSound();
+
+            //
             const audioURL: string          = this.service_recording.audioURL;
             this.service_recording.audioURL = null;
 
-            // audioURLs.push(audioURL);
             this.service_play.setAudioURLs(audioURL);
 
             this.bufferLoader = new BufferLoaderFoo(
                 this.context,
                 this.service_play.audioURLs,
-                // audioURLs,
                 this.finishedLoadingLooper
             );
 
@@ -142,5 +144,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
     stopSound() {
         this.service_play.stopSound();
+        this.service_play.resetSoundParam();
     }
 }

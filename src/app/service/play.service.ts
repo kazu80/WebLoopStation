@@ -74,9 +74,12 @@ export class PlayService {
             const source = this._sources[i];
             source.stop();
         }
+    }
 
+    resetSoundParam() {
         this._sources       = [];
         this._soundDuration = 0;
+        this._audioURLs     = [];
     }
 
     createGain(context: AudioContext): GainNode {
