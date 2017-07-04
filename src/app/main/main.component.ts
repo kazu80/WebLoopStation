@@ -61,14 +61,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             this.service_recording.audioURL = null;
 
             this.service_play.setAudioURLs(audioURL);
-
-            this.bufferLoader = new BufferLoaderFoo(
-                this.context,
-                this.service_play.audioURLs,
-                this.finishedLoadingLooper
-            );
-
-            this.bufferLoader.load();
+            this.service_play.playAudio(this.context);
         }
 
         // Recording Start / Stop
@@ -121,17 +114,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
             this.service_recording.start = true;
         }
     }
-
-    finishedLoadingLooper: any = (bufferList) => {
-        const bufferSources: AudioBufferSourceNode[] = [];
-
-        for (let i = 0; i < bufferList.length; i++) {
-            bufferSources[i]        = this.context.createBufferSource();
-            bufferSources[i].buffer = bufferList[i];
-
-            this.service_play.playSound(bufferSources[i].buffer, 0);
-        }
-    };
 
     stopSound() {
         this.service_play.stopSound();

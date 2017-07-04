@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {BufferLoaderFoo} from "../lib/BufferLoaderFoo";
 
 @Injectable()
 export class PlayService {
@@ -11,12 +12,14 @@ export class PlayService {
     private _soundDuration: number;
 
     private _audioURLs: string[];
+    private _bufferList: any[];
 
     constructor() {
         this._context       = new AudioContext;
         this._sources       = [];
         this._soundDuration = 0;
         this._audioURLs     = [];
+        this._bufferList    = [];
     }
 
     get playing(): any {
@@ -91,5 +94,24 @@ export class PlayService {
 
     public setAudioURLs(url: string): void {
         this._audioURLs.push(url);
+    }
+
+    public playAudio(context: AudioContext): void {
+        const bufferLoader = new BufferLoaderFoo(
+            context,
+            this._audioURLs,
+            (bufferList) => {
+                const bufferSources: AudioBufferSourceNode[] = [];
+
+                for (let i = 0; i < bufferList.length; i++) {
+                    bufferSources[i]        = context.createBufferSource();
+                    bufferSources[i].buffer = bufferList[i];
+
+                    this.playSound(bufferSources[i].buffer, 0);
+                }
+            }
+        );
+
+        bufferLoader.load();
     }
 }
