@@ -18,20 +18,11 @@ import {MicService} from "../service/mic.service";
     styleUrls  : ['./main.component.scss']
 })
 export class MainComponent implements OnInit, AfterViewInit, DoCheck {
-    public play                  = false;
-    public rec                   = false;
-    public time                  = 0;
-    public beat: number;
-           mediaRecorder: any;
-    public recordedChunks: any[] = [];
-           context: any;
-           bufferLoader: any;
-
-    kick: any;
-    snare: any;
-    hihat: any;
-    analyzeCanvas: HTMLElement;
-    source: any;
+    public play: boolean;
+    public rec: boolean;
+    public context: AudioContext;
+    public bufferLoader: any;
+    public analyzeCanvas: HTMLElement;
 
     constructor(public service_recording: RecordingService,
                 private service_user_media: UsermediaService,
