@@ -4,13 +4,14 @@ export class BufferLoaderFoo {
     onload: any;
     bufferList: any;
     loadCount: any;
+    private _loadedCount: number;
 
-    constructor(context, urlList, callback) {
-        this.context = context;
-        this.urlList = urlList;
-        this.onload = callback;
-        this.bufferList = [];
-        this.loadCount = 0;
+    constructor(context, callback) {
+        this.context      = context;
+        this.onload       = callback;
+        this.bufferList   = [];
+        this.loadCount    = 0;
+        this._loadedCount = 0;
     }
 
     loadBuffer(url, index) {
@@ -48,9 +49,18 @@ export class BufferLoaderFoo {
         request.send();
     }
 
-    load() {
-        for (let i = 0; i < this.urlList.length; ++i) {
+    load(urlList: string[]) {
+        this.urlList = urlList;
+
+        for (let i = this._loadedCount; i < this.urlList.length; ++i) {
             this.loadBuffer(this.urlList[i], i);
+            this._loadedCount++;
         }
+    }
+
+    resetParam() {
+        this._loadedCount = 0;
+        this.loadCount    = 0;
+        this.bufferList   = [];
     }
 }

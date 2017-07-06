@@ -8,9 +8,9 @@ import 'rxjs/add/observable/merge';
 import {RecordingService} from "../service/recording.service";
 import {UsermediaService} from "../service/usermedia.service";
 
-import {BufferLoaderFoo} from '../lib/BufferLoaderFoo';
 import {PlayService} from "../service/play.service";
 import {MicService} from "../service/mic.service";
+import {BufferLoaderFoo} from "../lib/BufferLoaderFoo";
 
 @Component({
     selector   : 'app-main',

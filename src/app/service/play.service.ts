@@ -14,12 +14,27 @@ export class PlayService {
     private _audioURLs: string[];
     private _bufferList: any[];
 
+    private _bufferLoader: any;
+
     constructor() {
         this._context       = new AudioContext;
         this._sources       = [];
         this._soundDuration = 0;
         this._audioURLs     = [];
         this._bufferList    = [];
+        this._bufferLoader  = new BufferLoaderFoo(
+            this._context,
+            (bufferList) => {
+                const bufferSources: AudioBufferSourceNode[] = [];
+
+                for (let i = 0; i < bufferList.length; i++) {
+                    bufferSources[i]        = this._context.createBufferSource();
+                    bufferSources[i].buffer = bufferList[i];
+
+                    this.playSound(bufferSources[i].buffer, 0);
+                }
+            }
+        );
     }
 
     get playing(): any {
@@ -65,6 +80,7 @@ export class PlayService {
         this._sources       = [];
         this._soundDuration = 0;
         this._audioURLs     = [];
+        this._bufferLoader.resetParam();
     }
 
     createGain(context: AudioContext): GainNode {
@@ -79,24 +95,7 @@ export class PlayService {
     }
 
     public playAudio(context: AudioContext): void {
-
-        // audioURLsの中で既にLoadしているのはもうLoadしない。これをBufferLoaderのなかで制御する
-        const bufferLoader = new BufferLoaderFoo(
-            context,
-            this._audioURLs,
-            (bufferList) => {
-                const bufferSources: AudioBufferSourceNode[] = [];
-
-                for (let i = 0; i < bufferList.length; i++) {
-                    bufferSources[i]        = context.createBufferSource();
-                    bufferSources[i].buffer = bufferList[i];
-
-                    this.playSound(bufferSources[i].buffer, 0);
-                }
-            }
-        );
-
-        bufferLoader.load();
+        this._bufferLoader.load(this._audioURLs);
     }
 
     public playSound(buffer, time) {
