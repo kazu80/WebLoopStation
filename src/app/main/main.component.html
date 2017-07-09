@@ -16,13 +16,21 @@
         </div>
 
 
-        <div class="button-wrapper">
-            <button class="btn btn-stop" (click)="stopSound()">
-                <div class="icon-wrapper">
-                    <i class="fa fa-stop" aria-hidden="true"> </i>
-                </div>
-            </button>
+        <div class="area-middle">
+            <div class="button-wrapper">
+                <button class="btn btn-stop" (click)="stopSound()">
+                    <div class="icon-wrapper">
+                        <i class="fa fa-stop" aria-hidden="true"> </i>
+                    </div>
+                </button>
+            </div>
+            <div class="voices-wrapper">
+                <button class="btn btn-voice"></button>
+                <button class="btn btn-voice"></button>
+                <button class="btn btn-voice"></button>
+            </div>
         </div>
+
 
         <div class="button-wrapper play">
             <button class="btn btn-play dark_blue" [class.active]="service_recording.recording" [class.over]="service_recording.recording && service_play.soundDuration > 0" (click)="clickLooper()">

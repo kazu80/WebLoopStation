@@ -116,6 +116,12 @@ $animation-time : 200ms;
     }
 }
 
+.btn-voice {
+    @extend .black;
+    width  : 100px;
+    height : 100px;
+}
+
 .btn-destination,
 .btn-play {
     @extend .black;
@@ -213,4 +219,21 @@ $animation-time : 200ms;
     }
 }
 
+.area-middle {
+    display         : flex;
+    flex-direction  : row;
+    justify-content : space-between;
 
+    .button-wrapper {
+        flex-grow : 1;
+        width     : 210px;
+    }
+
+    .voices-wrapper {
+        display         : flex;
+        flex-direction  : row;
+        justify-content : space-around;
+        flex-grow       : 4;
+        align-items     : center;
+    }
+}
