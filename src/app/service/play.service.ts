@@ -126,12 +126,19 @@ export class PlayService {
     public playVoice(num: number) {
         const source = this._voices[num - 1];
 
+        const convolverNode = this._context.createConvolver();
+        let concertHallBuffer: any;
+
         this._bufferLoader.loadBufferFromURL(source, (buffer) => {
-            const source  = this._context.createBufferSource();
-            source.buffer = buffer;
+            concertHallBuffer = buffer;
+            const source      = this._context.createBufferSource();
+            source.buffer     = concertHallBuffer;
             source.connect(this.createGain(this._context));
             source.start(0);
         });
+
+        convolverNode.buffer = concertHallBuffer;
+        convolverNode.connect(this._context.destination);
 
     }
 }
