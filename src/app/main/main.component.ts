@@ -118,4 +118,8 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
         this.service_play.stopSound();
         this.service_play.resetSoundParam();
     }
+
+    public clickVoice(num: number) {
+        this.service_play.playVoice(num);
+    }
 }

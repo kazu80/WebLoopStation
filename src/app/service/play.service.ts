@@ -16,6 +16,8 @@ export class PlayService {
 
     private _bufferLoader: any;
 
+    private _voices: string[];
+
     constructor() {
         this._context       = new AudioContext;
         this._sources       = [];
@@ -35,6 +37,11 @@ export class PlayService {
                 }
             }
         );
+        this._voices        = [
+            "../../assets/sounds/angular_83.m4a",
+            "../../assets/sounds/angular_c.m4a",
+            "../../assets/sounds/angular_q.m4a",
+        ];
     }
 
     get playing(): any {
@@ -116,4 +123,15 @@ export class PlayService {
         return source;
     }
 
+    public playVoice(num: number) {
+        const source = this._voices[num - 1];
+
+        this._bufferLoader.loadBufferFromURL(source, (buffer) => {
+            const source  = this._context.createBufferSource();
+            source.buffer = buffer;
+            source.connect(this.createGain(this._context));
+            source.start(0);
+        });
+
+    }
 }
