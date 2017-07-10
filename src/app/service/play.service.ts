@@ -17,14 +17,15 @@ export class PlayService {
     private _bufferLoader: any;
 
     private _voices: string[];
+    private _delay: any;
 
     constructor() {
-        this._context       = new AudioContext;
-        this._sources       = [];
-        this._soundDuration = 0;
-        this._audioURLs     = [];
-        this._bufferList    = [];
-        this._bufferLoader  = new BufferLoaderFoo(
+        this._context               = new AudioContext;
+        this._sources               = [];
+        this._soundDuration         = 0;
+        this._audioURLs             = [];
+        this._bufferList            = [];
+        this._bufferLoader          = new BufferLoaderFoo(
             this._context,
             (bufferList) => {
                 const bufferSources: AudioBufferSourceNode[] = [];
@@ -37,11 +38,14 @@ export class PlayService {
                 }
             }
         );
-        this._voices        = [
+        this._voices                = [
             "../../assets/sounds/angular_83.m4a",
             "../../assets/sounds/angular_c.m4a",
             "../../assets/sounds/angular_q.m4a",
         ];
+        this._delay                 = this._context.createDelay();
+        this._delay.delayTime.value = 0.08;
+
     }
 
     get playing(): any {
@@ -134,6 +138,10 @@ export class PlayService {
             const source      = this._context.createBufferSource();
             source.buffer     = concertHallBuffer;
             source.connect(this.createGain(this._context));
+
+            this._delay.connect(this.createGain(this._context));
+            source.connect(this._delay);
+
             source.start(0);
         });
 
