@@ -18,6 +18,7 @@ export class PlayService {
 
     private _voices: string[];
     private _delay: any;
+    private _feedback: any;
 
     constructor() {
         this._context               = new AudioContext;
@@ -44,7 +45,15 @@ export class PlayService {
             "../../assets/sounds/angular_q.m4a",
         ];
         this._delay                 = this._context.createDelay();
-        this._delay.delayTime.value = 0.08;
+        // this._delay.delayTime.value = 0.08;
+        this._delay.delayTime.value = 0.1;
+        this._delay.connect(this.createGain(this._context));
+
+        this._feedback            = this.createGain(this._context);
+        // this._feedback.gain.value = 0.5;
+        this._feedback.gain.value = 0.7;
+        this._delay.connect(this._feedback);
+        this._feedback.connect(this._delay);
 
     }
 
@@ -138,10 +147,7 @@ export class PlayService {
             const source      = this._context.createBufferSource();
             source.buffer     = concertHallBuffer;
             source.connect(this.createGain(this._context));
-
-            this._delay.connect(this.createGain(this._context));
             source.connect(this._delay);
-
             source.start(0);
         });
 
