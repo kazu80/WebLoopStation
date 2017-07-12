@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BufferLoaderFoo} from "../lib/BufferLoaderFoo";
+import {LooperAudioContext} from "../lib/LooperAudioContext";
 
 @Injectable()
 export class PlayService {
@@ -21,12 +22,12 @@ export class PlayService {
     private _feedback: any;
 
     constructor() {
-        this._context               = new AudioContext;
-        this._sources               = [];
-        this._soundDuration         = 0;
-        this._audioURLs             = [];
-        this._bufferList            = [];
-        this._bufferLoader          = new BufferLoaderFoo(
+        this._context       = LooperAudioContext.getInstance();
+        this._sources       = [];
+        this._soundDuration = 0;
+        this._audioURLs     = [];
+        this._bufferList    = [];
+        this._bufferLoader  = new BufferLoaderFoo(
             this._context,
             (bufferList) => {
                 const bufferSources: AudioBufferSourceNode[] = [];
