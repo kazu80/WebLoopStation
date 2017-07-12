@@ -12,6 +12,9 @@ export class SoundService {
     private _context: AudioContext;
     private _loader: BufferLoader;
 
+    private _buffer_1: any;
+    private _buffer_2: any;
+    private _buffer_3: any;
     private _sound_source_1: AudioBufferSourceNode;
     private _sound_source_2: AudioBufferSourceNode;
     private _sound_source_3: AudioBufferSourceNode;
@@ -51,15 +54,24 @@ export class SoundService {
 
         // load sound
         this._loader.loadBufferFromURL(sounds[0], (buffer) => {
-            this._sound_source_1.buffer = buffer;
+
+            this._buffer_1              = buffer;
+            this._sound_source_1.buffer = this._buffer_1;
         });
 
-        this._loader.loadBufferFromURL(sounds[0], (buffer) => {
-            this._sound_source_2.buffer = buffer;
+        this._loader.loadBufferFromURL(sounds[1], (buffer) => {
+
+            this._buffer_2              = buffer;
+            this._sound_source_2.buffer = this._buffer_2;
         });
 
-        this._loader.loadBufferFromURL(sounds[0], (buffer) => {
-            this._sound_source_3.buffer = buffer;
+
+        this._loader.loadBufferFromURL(sounds[2], (buffer) => {
+
+            /*
+             this._buffer_3 = buffer;
+             this._sound_source_3.buffer = this._buffer_3;
+             */
         });
     }
 
@@ -67,12 +79,27 @@ export class SoundService {
         switch (num) {
             case 1:
                 this._sound_source_1.start(time);
+                this._sound_source_1.onended = () => {
+                    this._sound_source_1        = this._context.createBufferSource();
+                    this._sound_source_1.buffer = this._buffer_1;
+                    this._sound_source_1.connect(this._sound_gain_1);
+                };
                 break;
             case 2:
                 this._sound_source_2.start(time);
+                this._sound_source_2.onended = () => {
+                    this._sound_source_2        = this._context.createBufferSource();
+                    this._sound_source_2.buffer = this._buffer_2;
+                    this._sound_source_2.connect(this._sound_gain_2);
+                };
                 break;
             case 3:
                 this._sound_source_3.start(time);
+                this._sound_source_3.onended = () => {
+                    this._sound_source_3        = this._context.createBufferSource();
+                    this._sound_source_3.buffer = this._buffer_3;
+                    this._sound_source_3.connect(this._sound_gain_3);
+                };
                 break;
         }
     }
