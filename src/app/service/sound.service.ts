@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BufferLoader} from "../lib/BufferLoader";
+import {LooperAudioContext} from "../lib/LooperAudioContext";
 
 const sounds: string[] = [
     "../../assets/sounds/angular_83.m4a",
@@ -23,7 +24,7 @@ export class SoundService {
     private _sound_gain_3: GainNode;
 
     constructor() {
-        this._context = new AudioContext();
+        this._context = LooperAudioContext.getInstance();
         this._loader  = new BufferLoader();
 
         this._sound_source_1 = this._context.createBufferSource();
@@ -54,24 +55,19 @@ export class SoundService {
 
         // load sound
         this._loader.loadBufferFromURL(sounds[0], (buffer) => {
-
             this._buffer_1              = buffer;
             this._sound_source_1.buffer = this._buffer_1;
         });
 
         this._loader.loadBufferFromURL(sounds[1], (buffer) => {
-
             this._buffer_2              = buffer;
             this._sound_source_2.buffer = this._buffer_2;
         });
 
 
         this._loader.loadBufferFromURL(sounds[2], (buffer) => {
-
-            /*
              this._buffer_3 = buffer;
              this._sound_source_3.buffer = this._buffer_3;
-             */
         });
     }
 

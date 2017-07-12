@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {LooperAudioContext} from "../lib/LooperAudioContext";
 
 @Injectable()
 export class MicService {
@@ -14,7 +15,7 @@ export class MicService {
 
     constructor() {
         this._analyzeMode   = 0;
-        this._audioctx      = new AudioContext;
+        this._audioctx      = LooperAudioContext.getInstance();
         this._analyze       = this._audioctx.createAnalyser();
         this._isUserMedia   = false;
         this._isDestination = false;

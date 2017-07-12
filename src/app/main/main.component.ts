@@ -12,6 +12,7 @@ import {PlayService} from "../service/play.service";
 import {MicService} from "../service/mic.service";
 import {BufferLoaderFoo} from "../lib/BufferLoaderFoo";
 import {SoundService} from "../service/sound.service";
+import {LooperAudioContext} from "../lib/LooperAudioContext";
 
 @Component({
     selector   : 'app-main',
@@ -34,7 +35,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     ngOnInit() {
         this.play    = this.service_play.start;
         this.rec     = this.service_recording.recording;
-        this.context = new AudioContext();
+        this.context = LooperAudioContext.getInstance();
     }
 
     ngAfterViewInit() {
