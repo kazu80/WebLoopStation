@@ -11,6 +11,7 @@ import {UsermediaService} from "../service/usermedia.service";
 import {PlayService} from "../service/play.service";
 import {MicService} from "../service/mic.service";
 import {BufferLoaderFoo} from "../lib/BufferLoaderFoo";
+import {SoundService} from "../service/sound.service";
 
 @Component({
     selector   : 'app-main',
@@ -26,7 +27,8 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     constructor(public service_recording: RecordingService,
                 private service_user_media: UsermediaService,
                 public service_play: PlayService,
-                public service_mic: MicService) {
+                public service_mic: MicService,
+                public service_sound: SoundService) {
     }
 
     ngOnInit() {
@@ -120,6 +122,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     public clickVoice(num: number) {
-        this.service_play.playVoice(num);
+        this.service_sound.start(num);
     }
 }
