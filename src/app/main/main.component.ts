@@ -13,6 +13,7 @@ import {MicService} from "../service/mic.service";
 import {BufferLoaderFoo} from "../lib/BufferLoaderFoo";
 import {SoundService} from "../service/sound.service";
 import {LooperAudioContext} from "../lib/LooperAudioContext";
+import {AnalyzeService} from "../service/analyze.service";
 
 @Component({
     selector   : 'app-main',
@@ -23,27 +24,26 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     public play: boolean;
     public rec: boolean;
     public context: AudioContext;
-    public analyzeCanvas: HTMLElement;
+    public isDestinationConnecting: boolean;
 
     constructor(public service_recording: RecordingService,
                 private service_user_media: UsermediaService,
                 public service_play: PlayService,
                 public service_mic: MicService,
-                public service_sound: SoundService) {
+                public service_sound: SoundService,
+                public service_analyze: AnalyzeService) {
     }
 
     ngOnInit() {
-        this.play    = this.service_play.start;
-        this.rec     = this.service_recording.recording;
-        this.context = LooperAudioContext.getInstance();
+        this.play                    = this.service_play.start;
+        this.rec                     = this.service_recording.recording;
+        this.context                 = LooperAudioContext.getInstance();
+        this.isDestinationConnecting = false;
     }
 
     ngAfterViewInit() {
         // analyze canvas
-        this.analyzeCanvas = document.getElementById("analyze");
-
-        //
-        this.service_mic.analyze(this.analyzeCanvas);
+        this.service_analyze.analyze(document.getElementById("analyze"));
     }
 
     /**
@@ -89,11 +89,14 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
         // mic ON / OFF
         if (this.service_mic.isMic === true && !this.service_mic.stream && this.service_mic.isUserMedia === false) {
             this.service_mic.on();
+            // this.service_analyze.connect(this.service_mic.source);
         } else if (this.service_mic.isMic === false && this.service_mic.stream) {
             this.service_mic.off();
+            // this.service_analyze.disconnect(this.service_mic.source);
         }
 
         // Destination
+        // mic をONにすると、Disconnectが作動してしまう
         if (this.service_mic.isDestination === true && this.service_mic.stream) {
             this.service_mic.destinationConnect();
         } else if (this.service_mic.isDestination === false && this.service_mic.stream) {
