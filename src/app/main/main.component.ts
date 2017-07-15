@@ -24,7 +24,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     public play: boolean;
     public rec: boolean;
     public context: AudioContext;
-    public isDestinationConnecting: boolean;
+    public isDestination: boolean;
 
     constructor(public service_recording: RecordingService,
                 private service_user_media: UsermediaService,
@@ -35,10 +35,10 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     ngOnInit() {
-        this.play                    = this.service_play.start;
-        this.rec                     = this.service_recording.recording;
-        this.context                 = LooperAudioContext.getInstance();
-        this.isDestinationConnecting = false;
+        this.play          = this.service_play.start;
+        this.rec           = this.service_recording.recording;
+        this.context       = LooperAudioContext.getInstance();
+        this.isDestination = false;
     }
 
     ngAfterViewInit() {
@@ -97,9 +97,9 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
         // Destination
         // mic をONにすると、Disconnectが作動してしまう
-        if (this.service_mic.isDestination === true && this.service_mic.stream) {
+        if (this.isDestination === true && this.service_mic.isDestination === false) {
             this.service_mic.destinationConnect();
-        } else if (this.service_mic.isDestination === false && this.service_mic.stream) {
+        } else if (this.isDestination === false && this.service_mic.isDestination === true) {
             this.service_mic.destinationDisconnect();
         }
     }
@@ -109,7 +109,7 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     public clickDestination() {
-        this.service_mic.isDestination = !this.service_mic.isDestination;
+        this.isDestination = !this.isDestination;
     }
 
     public clickLooper() {
