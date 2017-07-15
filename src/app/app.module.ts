@@ -7,6 +7,7 @@ import {UsermediaService} from "./service/usermedia.service";
 import {PlayService} from "./service/play.service";
 import {MicService} from "./service/mic.service";
 import {SoundService} from "./service/sound.service";
+import {AnalyzeService} from "./service/analyze.service";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {SoundService} from "./service/sound.service";
     UsermediaService,
     PlayService,
     MicService,
-    SoundService
+    SoundService,
+    AnalyzeService
   ],
   bootstrap: [MainComponent]
 })
