@@ -4,9 +4,9 @@
         <div class="mic-control-wrapper">
             <div class="button-wrapper">
                 <button class="btn btn-mic" (click)="clickMic()" [ngClass]="{'active': service_mic.isMic}">MIC</button>
-                <button class="btn btn-destination" (click)="clickDestination()" [ngClass]="{'active': service_mic.isDestination}">
+                <button class="btn btn-destination" (click)="clickDestination()" [ngClass]="{'active': service_destination.isConnect}">
                     <div class="icon-wrapper icon-destination">
-                        <i class="fa" [ngClass]="{'fa-volume-off': service_mic.isDestination === false, 'fa-volume-up': service_mic.isDestination === true}" aria-hidden="true"> </i>
+                        <i class="fa" [ngClass]="{'fa-volume-off': service_destination.isConnect === false, 'fa-volume-up': service_destination.isConnect === true}" aria-hidden="true"> </i>
                     </div>
                 </button>
             </div>

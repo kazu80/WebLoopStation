@@ -44,29 +44,14 @@ export class MicService {
         return this._source;
     }
 
-    destinationConnect() {
-        this._source.connect(this._audioctx.destination);
-        this._isDestination = true;
-    }
-
-    destinationDisconnect() {
-        try {
-            this._source.disconnect(this._audioctx.destination);
-        } catch (e) {
-            console.warn(`error: ${e}`);
-        }
-
-        this._isDestination = false;
-    }
-
-    on() {
+    on(callback) {
         this._isUserMedia = true;
 
-        navigator.getUserMedia(
-            {audio: true, video: false},
+        navigator.getUserMedia({audio: true, video: false},
             (mediaStream) => {
                 this._stream = mediaStream;
                 this._source = this._audioctx.createMediaStreamSource(mediaStream);
+                callback(this._source);
             },
             (e) => {
                 console.error(e);
