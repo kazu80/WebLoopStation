@@ -9,6 +9,7 @@ import {MicService} from "./service/mic.service";
 import {SoundService} from "./service/sound.service";
 import {AnalyzeService} from "./service/analyze.service";
 import {DestinationService} from "./service/destination.service";
+import {GainService} from "./service/gain.service";
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {DestinationService} from "./service/destination.service";
     MicService,
     SoundService,
     AnalyzeService,
-    DestinationService
+      DestinationService,
+      GainService
   ],
   bootstrap: [MainComponent]
 })
