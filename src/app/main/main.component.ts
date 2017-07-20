@@ -133,6 +133,6 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
     }
 
     public clickVoice(num: number) {
-        this.service_sound.start(num);
+        this.service_sound.start(num, this.service_gain.master);
     }
 }

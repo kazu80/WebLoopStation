@@ -71,7 +71,7 @@ export class SoundService {
         });
     }
 
-    start(num: number, time: number = 0) {
+    start(num: number, master_gain: GainNode, time: number = 0) {
         switch (num) {
             case 1:
                 this._sound_source_1.start(time);
@@ -79,6 +79,7 @@ export class SoundService {
                     this._sound_source_1        = this._context.createBufferSource();
                     this._sound_source_1.buffer = this._buffer_1;
                     this._sound_source_1.connect(this._sound_gain_1);
+                    this._sound_gain_1.connect(master_gain);
                 };
                 break;
             case 2:
@@ -87,6 +88,7 @@ export class SoundService {
                     this._sound_source_2        = this._context.createBufferSource();
                     this._sound_source_2.buffer = this._buffer_2;
                     this._sound_source_2.connect(this._sound_gain_2);
+                    this._sound_gain_2.connect(master_gain);
                 };
                 break;
             case 3:
@@ -95,6 +97,7 @@ export class SoundService {
                     this._sound_source_3        = this._context.createBufferSource();
                     this._sound_source_3.buffer = this._buffer_3;
                     this._sound_source_3.connect(this._sound_gain_3);
+                    this._sound_gain_3.connect(master_gain);
                 };
                 break;
         }
