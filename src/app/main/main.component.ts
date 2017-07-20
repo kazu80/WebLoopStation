@@ -15,6 +15,7 @@ import {SoundService} from "../service/sound.service";
 import {LooperAudioContext} from "../lib/LooperAudioContext";
 import {AnalyzeService} from "../service/analyze.service";
 import {DestinationService} from "../service/destination.service";
+import {GainService} from "../service/gain.service";
 
 @Component({
     selector   : 'app-main',
@@ -33,7 +34,8 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
                 public service_mic: MicService,
                 public service_sound: SoundService,
                 public service_analyze: AnalyzeService,
-                public service_destination: DestinationService) {
+                public service_destination: DestinationService,
+                public service_gain: GainService) {
     }
 
     ngOnInit() {
@@ -90,10 +92,14 @@ export class MainComponent implements OnInit, AfterViewInit, DoCheck {
 
         // mic ON / OFF
         if (this.service_mic.isMic === true && !this.service_mic.stream && this.service_mic.isUserMedia === false) {
-            this.service_mic.on((source) => this.service_analyze.connect(source));
+            this.service_mic.on((source) => {
+                this.service_gain.connect(source);
+                this.service_analyze.connect(source);
+            });
 
         } else if (this.service_mic.isMic === false && this.service_mic.stream) {
             this.service_mic.off();
+            this.service_gain.disconnect(this.service_mic.source);
             this.service_analyze.disconnect(this.service_mic.source);
         }
 
