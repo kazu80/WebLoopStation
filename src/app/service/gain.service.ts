@@ -13,6 +13,10 @@ export class GainService {
         this._volume   = 0.5;
     }
 
+    get master(): GainNode {
+        return this._master;
+    }
+
     connect(source: AudioBufferSourceNode): AudioBufferSourceNode {
         this._master.gain.value = this._volume;
         source.connect(this._master);
